@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import Select from '../../form/Select';
 import Submit from '../../form/Submit';
 
@@ -13,10 +14,11 @@ function getYears() {
   return years;
 }
 
-function TotalFlights() {
+function TotalFlightsRange() {
   const years = getYears();
   const [startYear, setStartYear] = useState('');
   const [endYear, setEndYear] = useState('');
+  const [totalFlights, setTotalFlights] = useState(-1);
 
   const handleStartYearChange = (e) => {
     setStartYear(e.target.value);
@@ -28,13 +30,23 @@ function TotalFlights() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('startYear:', startYear);
-    console.log('endYear:', endYear);
-  }
+    // Use axios to send the data to the backend
+    axios.post('/api/total-flights-range', {
+      // Cast the years to integers
+      start_year: Number(startYear),
+      end_year: Number(endYear)
+    })
+    .then((response) => {
+      setTotalFlights(response.data.total_flights);
+    })
+    .catch((error) => {
+      console.log(error);
+    }
+    )};
 
   return (
-    <div class="flex flex-col justify-center items-center w-1/2 border-2 border-grey p-5">
-      <h1 class="text-black text-3xl font-sans font-semibold mb-8">Total Flights</h1>
+    <div class="flex flex-col justify-center items-center w-3/5 border-2 border-grey p-5">
+      <h1 class="text-black text-3xl font-sans font-semibold mb-8">Total Flights (Range)</h1>
       <form onSubmit={handleSubmit} class="w-full">
         <div class="flex flex-col justify-center items-center w-full">
           <div class="flex flex-row justify-between items-center w-full">
@@ -47,8 +59,9 @@ function TotalFlights() {
           </div>
         </div>
       </form>
+      {totalFlights !== -1 && <p class="text-black text-1xl font-sans font-semibold mt-5">Total Flights: {totalFlights}</p>}
     </div>
   )
 }
 
-export default TotalFlights;
+export default TotalFlightsRange;

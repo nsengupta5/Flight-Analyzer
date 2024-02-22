@@ -8,31 +8,33 @@ CORS(app)
 # Initialize Spark Session
 spark = SparkSession.builder.appName('AeroSights').getOrCreate()
 
-@app.route('/api/total-flights-range', methods=['GET'])
+@app.route('/api/total-flights-range', methods=['POST'])
 def total_flights_range():
     total_flights = 0
-    start_date = request.args.get('start_year', type=int)
-    end_date = request.args.get('end_year', type=int)
+
+    data = request.get_json()
+    start_date = data.get('start_year')
+    end_date = data.get('end_year')
     df = spark.read.parquet('data/airline.parquet', header=True)
 
-    for i in range(start_date, end_date):
-        df_filtered = df.where(df['Year'] == i)
-        total_flights += df_filtered.count()
+    if start_date is not None and end_date is not None:
+        for i in range(start_date, end_date + 1):
+            df_filtered = df.where(df['Year'] == i)
+            total_flights += df_filtered.count()
+        return jsonify({'total_flights': total_flights})
+    else:
+        return jsonify({'error': 'Start and end years not provided'})
 
-    return jsonify({'total_flights': total_flights})
-
-@app.route('/api/total-flights-list', methods=['GET'])
-
+@app.route('/api/total-flights-list', methods=['POST'])
 def total_flights_list():
     total_flights = 0
-    years = request.args.get('years', type=str)
+    data = request.get_json()
+    years = data.get('years')
     if years is not None:
         df = spark.read.parquet('data/airline.parquet', header=True)
-        for i in range(years):
-            year = int(years[i])
+        for year in years:
             df_filtered = df.where(df['Year'] == year)
             total_flights += df_filtered.count()
-
         return jsonify({'total_flights': total_flights})
     else:
         return jsonify({'error': 'Years not provided'})
