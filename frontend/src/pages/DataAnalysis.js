@@ -2,6 +2,8 @@ import React from 'react';
 import TotalFlightsRange from '../components/tasks/Part1/TotalFlightsRange';
 import TotalFLightsList from '../components/tasks/Part1/TotalFlightsList';
 import FlightTimeliness from '../components/tasks/Part1/FlightTimeliness';
+import TopCancellationReason from '../components/tasks/Part1/TopCancellationReason';
+import MostPunctualAirports from '../components/tasks/Part1/MostPunctualAirports';
 
 function DataAnalysis() {
   return (
@@ -13,6 +15,10 @@ function DataAnalysis() {
         <TotalFLightsList />
         <br />
         <FlightTimeliness />
+        <br />
+        <TopCancellationReason />
+        <br />
+        <MostPunctualAirports />
     </div>
   )
 }

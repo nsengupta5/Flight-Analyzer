@@ -14,6 +14,10 @@ function getYears() {
   return years;
 }
 
+function isValidRange(startYear, endYear) {
+  return startYear <= endYear;
+}
+
 function TotalFlightsRange() {
   const years = getYears();
   const [startYear, setStartYear] = useState('');
@@ -32,6 +36,12 @@ function TotalFlightsRange() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!isValidRange(Number(startYear), Number(endYear))) {
+      alert('Invalid range');
+      return;
+    }
+
     // Use axios to send the data to the backend
     axios.post('/api/total-flights-range', {
       // Cast the years to integers
