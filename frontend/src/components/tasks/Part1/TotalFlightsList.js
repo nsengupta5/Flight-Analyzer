@@ -50,9 +50,7 @@ function TotalFlightsList() {
       <h1 class="text-black text-3xl font-sans font-semibold mb-8">Total Flights (List)</h1>
       <form onSubmit={handleSubmit} class="w-full">
         <div class="flex flex-col justify-center items-center w-full">
-          <div>
             <Input placeholder="Enter comma separated years" onChange={handleYearChange} />
-          </div>
           <div class="mt-7">
             <Submit placeholder="Get Number of Years"/>
           </div>

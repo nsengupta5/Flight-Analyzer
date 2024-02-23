@@ -21,10 +21,12 @@ function TotalFlightsRange() {
   const [totalFlights, setTotalFlights] = useState(-1);
 
   const handleStartYearChange = (e) => {
+    setTotalFlights(-1)
     setStartYear(e.target.value);
   }
 
   const handleEndYearChange = (e) => {
+    setTotalFlights(-1)
     setEndYear(e.target.value);
   }
 
