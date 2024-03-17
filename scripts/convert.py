@@ -12,7 +12,11 @@ data_file = f"{source_data_dir}/airline.csv"
 parquet_file = f"{local_data_dir}/airline.parquet"
 
 # Main airline data
-spark = SparkSession.builder.appName("convert").getOrCreate()
+spark = SparkSession.builder \
+    .appName("convert") \
+    .config("spark.driver.memory", "4g") \
+    .config("spark.executor.memory", "4g") \
+    .getOrCreate()
 airline_df = spark.read.format("csv").option("header", "true").load(data_file)
 airline_df.write.format("parquet").save(parquet_file)
 
