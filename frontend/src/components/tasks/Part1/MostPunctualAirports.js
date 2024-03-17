@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Select from '../../form/Select';
 import Submit from '../../form/Submit';
-import Plot from 'react-plotly.js';
 
 function MostPunctualAirports() {
   const years = [1987, 1997, 2007, 2017];
@@ -10,6 +9,7 @@ function MostPunctualAirports() {
   const [puncAirports, setPuncAirports] = useState([]);
 
   const handleYearChange = (e) => {
+    setPuncAirports([]);
     setYear(e.target.value);
   }
 

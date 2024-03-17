@@ -4,6 +4,7 @@ import TotalFLightsList from '../components/tasks/Part1/TotalFlightsList';
 import FlightTimeliness from '../components/tasks/Part1/FlightTimeliness';
 import TopCancellationReason from '../components/tasks/Part1/TopCancellationReason';
 import MostPunctualAirports from '../components/tasks/Part1/MostPunctualAirports';
+import WorstPerformingAirlines from '../components/tasks/Part1/WorstPerformingAirlines';
 
 function DataAnalysis() {
   return (
@@ -19,6 +20,8 @@ function DataAnalysis() {
         <TopCancellationReason />
         <br />
         <MostPunctualAirports />
+        <br />
+        <WorstPerformingAirlines />
     </div>
   )
 }
