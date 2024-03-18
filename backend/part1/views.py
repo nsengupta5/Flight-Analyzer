@@ -44,12 +44,14 @@ def flight_timeliness_stats():
     total_flights = airline_df.where(airline_df['Year'] == year).count()
     on_time_flights = airline_df.where((airline_df['Year'] == year) & (airline_df['DepDelay'] == 0)).count()
     delayed_flights = airline_df.where((airline_df['Year'] == year) & (airline_df['DepDelay'] > 0)).count()
-    early_flights = total_flights - on_time_flights - delayed_flights
+    early_flights = airline_df.where((airline_df['Year'] == year) & (airline_df['DepDelay'] < 0)).count()
+    unknown_flights = total_flights - (on_time_flights + delayed_flights + early_flights)
     return jsonify({
         'total_flights': total_flights,
         'on_time_flights': on_time_flights,
         'delayed_flights': delayed_flights,
-        'early_flights': early_flights
+        'early_flights': early_flights,
+        'unknown_flights': unknown_flights
     })
 
 # Provide the top reasons for flight cancellations for a given year

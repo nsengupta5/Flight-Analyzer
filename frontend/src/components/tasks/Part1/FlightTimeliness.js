@@ -16,12 +16,26 @@ function getYears() {
   return years;
 }
 
+function getPlotColorsMapping() {
+  const colorMapping = {
+    'On Time': '#63D1F4', // Color for "On Time"
+    'Delayed': '#FEBFB3', // Color for "Delayed"
+    'Early': '#63264A',   // Color for "Early"
+    'Unknown': '#E2E2E2'  // Color for "Unknown
+  };
+
+  // Map your labels to the corresponding colors
+  const colors = ['On Time', 'Delayed', 'Early', 'Unknown'].map(label => colorMapping[label]);
+  return colors;
+}
+
 function FlightTimeliness() {
   const years = getYears();
   const [year, setYear] = useState('');
   const [onTimeFlights, setOnTimeFlights] = useState(-1);
   const [delayedFlights, setDelayedFlights] = useState(-1);
   const [earlyFlights, setEarlyFlights] = useState(-1);
+  const [unknownFlights, setUnknownFlights] = useState(-1);
   const [totalFlights, setTotalFlights] = useState(-1);
 
   const handleYearChange = (e) => {
@@ -29,6 +43,7 @@ function FlightTimeliness() {
     setDelayedFlights(-1);
     setEarlyFlights(-1);
     setTotalFlights(-1);
+    setUnknownFlights(-1);
     setYear(e.target.value);
   }
 
@@ -44,6 +59,7 @@ function FlightTimeliness() {
         setOnTimeFlights(response.data.on_time_flights);
         setDelayedFlights(response.data.delayed_flights);
         setEarlyFlights(response.data.early_flights);
+        setUnknownFlights(response.data.unknown_flights);
         setTotalFlights(response.data.total_flights);
       })
       .catch((error) => {
@@ -72,9 +88,12 @@ function FlightTimeliness() {
             // Pie chart showing the percentage of on-time, delayed, and early flights
             data={[
               {
-                values: [onTimeFlights, delayedFlights, earlyFlights],
-                  labels: ['On Time', 'Delayed', 'Early'],
-                  type: 'pie'
+                values: [onTimeFlights, delayedFlights, earlyFlights, unknownFlights],
+                  labels: ['On Time', 'Delayed', 'Early', 'Unknown'],
+                  type: 'pie',
+                  marker: {
+                    colors: getPlotColorsMapping()
+                  }
               }
             ]}
             layout={{ autosize:true, title: 'Flight Timeliness Stats' }}
