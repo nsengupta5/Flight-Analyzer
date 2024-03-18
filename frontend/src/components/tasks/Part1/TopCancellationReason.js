@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Select from '../../form/Select';
 import Submit from '../../form/Submit';
+import Card from '../../ui/Card';
 
 function getYears() {
   const startYear = 1987;
@@ -41,7 +42,7 @@ function TopCancellationReason() {
       )};
 
   return (
-    <div class="flex flex-col justify-center items-center w-3/5 border-2 border-grey p-5">
+    <Card>
       <h1 class="text-black text-3xl font-sans font-semibold mb-8">Top Cancellation Reason</h1>
       <form onSubmit={handleSubmit} class="w-full">
         <div class="flex flex-col justify-center items-center w-full">
@@ -54,7 +55,7 @@ function TopCancellationReason() {
         </div>
       </form>
       {reason !== '' && <p class="text-black text-1xl font-sans font-semibold mt-5">Top Cancellation Reason: {reason}</p>}
-    </div>
+    </Card>
   )
 }
 

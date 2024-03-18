@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Select from '../../form/Select';
 import Submit from '../../form/Submit';
+import Card from '../../ui/Card';
 
 function MostPunctualAirports() {
   const years = [1987, 1997, 2007, 2017];
@@ -30,7 +31,7 @@ function MostPunctualAirports() {
       )};
 
   return (
-    <div class="flex flex-col justify-center items-center w-3/5 border-2 border-grey p-5">
+    <Card>
       <h1 class="text-black text-3xl font-sans font-semibold mb-8">Most Punctual Airports</h1>
       <form onSubmit={handleSubmit} class="w-full">
         <div class="flex flex-col justify-center items-center w-full">
@@ -50,7 +51,7 @@ function MostPunctualAirports() {
         ))}
         </>
       }
-    </div>
+    </Card>
   )
 }
 

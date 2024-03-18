@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Card from '../../ui/Card';
 import axios from 'axios';
 
 function WorstPerformingAirlines() {
@@ -17,7 +18,7 @@ function WorstPerformingAirlines() {
   , []);
 
   return (
-    <div class="flex flex-col justify-center items-center w-3/5 border-2 border-grey p-5">
+    <Card>
       <h1 class="text-black text-3xl font-sans font-semibold mb-3">Worst Performing Airlines</h1>
       {airlines && 
         <>
@@ -26,7 +27,7 @@ function WorstPerformingAirlines() {
         ))}
         </>
       }
-    </div>
+    </Card>
   )
 }
 

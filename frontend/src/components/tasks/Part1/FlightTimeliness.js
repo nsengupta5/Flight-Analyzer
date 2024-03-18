@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Select from '../../form/Select';
 import Submit from '../../form/Submit';
+import Card from '../../ui/Card';
 import Plot from 'react-plotly.js';
 
 function getYears() {
@@ -51,7 +52,7 @@ function FlightTimeliness() {
       )};
 
   return (
-    <div class="flex flex-col justify-center items-center w-3/5 border-2 border-grey p-5">
+    <Card>
       <h1 class="text-black text-3xl font-sans font-semibold mb-8">Flight Timeliness Stats</h1>
       <form onSubmit={handleSubmit} class="w-full">
         <div class="flex flex-col justify-center items-center w-full">
@@ -81,7 +82,7 @@ function FlightTimeliness() {
             style={{ width: "100%", height: "100%" }}
           />
       }
-    </div>
+    </Card>
   )
 }
 

@@ -1,21 +1,18 @@
-from flask import Flask, jsonify, request
-from flask_cors import CORS
+from flask import jsonify, request
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
-
-app = Flask(__name__)
-CORS(app)
+from . import part1_blueprint as bp
 
 airline_data = 'data/airline.parquet'
 cancellation_mapping = 'data/L_CANCELLATION.parquet'
 
-# Initialize Spark Session
+# Get Spark Session
 spark = SparkSession.builder.appName('AeroSights').getOrCreate()
 
 # Main airline dataframe
 airline_df = spark.read.parquet(airline_data, header=True)
 
-@app.route('/api/total-flights-range', methods=['POST'])
+@bp.route('/api/total-flights-range', methods=['POST'])
 def total_flights_range():
     total_flights = 0
 
@@ -29,7 +26,7 @@ def total_flights_range():
     else:
         return jsonify({'error': 'Start and end years not provided'})
 
-@app.route('/api/total-flights-list', methods=['POST'])
+@bp.route('/api/total-flights-list', methods=['POST'])
 def total_flights_list():
     total_flights = 0
     data = request.get_json()
@@ -40,7 +37,7 @@ def total_flights_list():
     else:
         return jsonify({'error': 'Years not provided'})
 
-@app.route('/api/flight-timeliness-stats', methods=['POST'])
+@bp.route('/api/flight-timeliness-stats', methods=['POST'])
 def flight_timeliness_stats():
     data = request.get_json()
     year = data.get('year')
@@ -56,7 +53,7 @@ def flight_timeliness_stats():
     })
 
 # Provide the top reasons for flight cancellations for a given year
-@app.route('/api/top-cancellation-reason', methods=['POST'])
+@bp.route('/api/top-cancellation-reason', methods=['POST'])
 def cancellation_reasons():
     data = request.get_json()
     year = data.get('year')
@@ -96,7 +93,7 @@ def replaceStateAbbreviation(airport):
 
     return full_airport + ': ' + airport_arr[1]
 
-@app.route('/api/most-punctual-airports', methods=['POST'])
+@bp.route('/api/most-punctual-airports', methods=['POST'])
 def most_punctual_airports():
     most_punctual_airports = []
 
@@ -123,7 +120,7 @@ def most_punctual_airports():
     else:
         return jsonify({'error': 'Year not provided'})
 
-@app.route('/api/worst-performing-airlines', methods=['GET'])
+@bp.route('/api/worst-performing-airlines', methods=['GET'])
 def worst_performing_airlines():
     airline_mapping = spark.read.parquet('data/L_AIRLINE_ID.parquet', header=True)
 
@@ -146,6 +143,3 @@ def worst_performing_airlines():
     # Get the top 3 worst perfoming airlines
     worst_perfoming_airlines = [airline['Description'] for airline in airlines]
     return jsonify({'worst_performing_airlines': worst_perfoming_airlines})
-
-if __name__ == '__main__':
-    app.run(debug=True)
