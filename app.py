@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import median
+from pyspark.sql import functions as F
 
 app = Flask(__name__)
 CORS(app)
@@ -12,6 +12,9 @@ cancellation_mapping = 'data/L_CANCELLATION.parquet'
 # Initialize Spark Session
 spark = SparkSession.builder.appName('AeroSights').getOrCreate()
 
+# Main airline dataframe
+airline_df = spark.read.parquet(airline_data, header=True)
+
 @app.route('/api/total-flights-range', methods=['POST'])
 def total_flights_range():
     total_flights = 0
@@ -19,12 +22,9 @@ def total_flights_range():
     data = request.get_json()
     start_date = data.get('start_year')
     end_date = data.get('end_year')
-    df = spark.read.parquet(airline_data, header=True)
 
     if start_date is not None and end_date is not None:
-        for i in range(start_date, end_date + 1):
-            df_filtered = df.where(df['Year'] == i)
-            total_flights += df_filtered.count()
+        total_flights = airline_df.filter(airline_df['Year'] >= start_date).filter(airline_df['Year'] <= end_date).count()
         return jsonify({'total_flights': total_flights})
     else:
         return jsonify({'error': 'Start and end years not provided'})
@@ -35,10 +35,7 @@ def total_flights_list():
     data = request.get_json()
     years = data.get('years')
     if years is not None:
-        df = spark.read.parquet(airline_data, header=True)
-        for year in years:
-            df_filtered = df.where(df['Year'] == year)
-            total_flights += df_filtered.count()
+        total_flights = airline_df.filter(airline_df['Year'].isin(years)).count()
         return jsonify({'total_flights': total_flights})
     else:
         return jsonify({'error': 'Years not provided'})
@@ -47,10 +44,9 @@ def total_flights_list():
 def flight_timeliness_stats():
     data = request.get_json()
     year = data.get('year')
-    df = spark.read.parquet(airline_data, header=True)
-    total_flights = df.where(df['Year'] == year).count()
-    on_time_flights = df.where((df['Year'] == year) & (df['DepDelay'] == 0)).count()
-    delayed_flights = df.where((df['Year'] == year) & (df['DepDelay'] > 0)).count()
+    total_flights = airline_df.where(airline_df['Year'] == year).count()
+    on_time_flights = airline_df.where((airline_df['Year'] == year) & (airline_df['DepDelay'] == 0)).count()
+    delayed_flights = airline_df.where((airline_df['Year'] == year) & (airline_df['DepDelay'] > 0)).count()
     early_flights = total_flights - on_time_flights - delayed_flights
     return jsonify({
         'total_flights': total_flights,
@@ -65,7 +61,6 @@ def cancellation_reasons():
     data = request.get_json()
     year = data.get('year')
     if year is not None:
-        airline_df = spark.read.parquet(airline_data, header=True)
         cancellation_df = spark.read.parquet(cancellation_mapping, header=True)
 
         # Join the airline_df and cancellation_df on the CancellationCode
@@ -75,15 +70,17 @@ def cancellation_reasons():
         filtered_df = joined_df.where(joined_df['Year'] == year)
 
         # Group by the cancellation reason and count the number of cancellations
-        cancellation_reasons = filtered_df.groupBy('Description').count().collect()
+        cancellation_reasons = (
+            filtered_df.groupBy('Description')
+            .count()
+            .orderBy('count', ascending=False)
+            .limit(1)
+            .collect()
+        )
 
         # Convert the cancellation reasons to a dictionary
         if cancellation_reasons:
-            reasons = {}
-            for reason in cancellation_reasons:
-                reasons[reason['Description']] = reason['count']
-
-            max_reason = max(reasons, key=reasons.get)
+            max_reason = cancellation_reasons[0]['Description']
             return jsonify({'top_reason': max_reason})
         else:
             return jsonify({'top_reason': 'Unknown'})
@@ -106,12 +103,10 @@ def most_punctual_airports():
     data = request.get_json()
     year = data.get('year')
     if year is not None:
-        airline_df = spark.read.parquet(airline_data, header=True)
         airport_df = spark.read.parquet('data/L_AIRPORT_ID.parquet', header=True)
-
-        airline_df = airline_df.where(airline_df['Year'] == year)
-        medians_df = airline_df.groupBy('OriginAirportID').agg(
-            median("DepDelay")).withColumnRenamed(
+        airline_df_by_year = airline_df.where(airline_df['Year'] == year)
+        medians_df = airline_df_by_year.groupBy('OriginAirportID').agg(
+            F.median("DepDelay")).withColumnRenamed(
             "median(DepDelay)", "MedianDepDelay").orderBy(
             "MedianDepDelay", ascending=True).limit(3)
         
@@ -127,6 +122,30 @@ def most_punctual_airports():
         return jsonify({'most_punctual_airports': most_punctual_airports})
     else:
         return jsonify({'error': 'Year not provided'})
+
+@app.route('/api/worst-performing-airlines', methods=['GET'])
+def worst_performing_airlines():
+    airline_mapping = spark.read.parquet('data/L_AIRLINE_ID.parquet', header=True)
+
+    reporting_airlines = airline_df.groupBy('DOT_ID_Reporting_Airline').agg(
+        (F.sum(F.when(F.col('DepDel15') == 1, 1).otherwise(0)) / F.count('*')).alias('PercentageDepDelayedFlights'),
+        (F.sum(F.when(F.col('ArrDel15') == 1, 1).otherwise(0)) / F.count('*')).alias('PercentageArrDelayedFlights'),
+        (F.sum(F.when(F.col('Cancelled') == 1, 1).otherwise(0)) / F.count('*')).alias('PercentageCancelledFlights')
+    )
+
+    performance_df = reporting_airlines.withColumn(
+        "CompositePercentage",
+        (F.col("PercentageDepDelayedFlights") + F.col("PercentageArrDelayedFlights") + F.col("PercentageCancelledFlights")) / 3
+    ).orderBy("CompositePercentage", ascending=False).limit(3)
+
+    # Get the names of the worst perfoming airlines
+    airlines = performance_df.join(F.broadcast(airline_mapping),
+                                   performance_df.DOT_ID_Reporting_Airline == airline_mapping.Code,
+                                   'inner').select('Description').collect()
+
+    # Get the top 3 worst perfoming airlines
+    worst_perfoming_airlines = [airline['Description'] for airline in airlines]
+    return jsonify({'worst_performing_airlines': worst_perfoming_airlines})
 
 if __name__ == '__main__':
     app.run(debug=True)
