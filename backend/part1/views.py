@@ -12,6 +12,19 @@ spark = SparkSession.builder.appName('AeroSights').getOrCreate()
 # Main airline dataframe
 airline_df = spark.read.parquet(airline_data, header=True)
 
+@bp.route('/api/total-flights-year', methods=['POST'])
+def total_flights_year():
+    total_flights = 0
+
+    data = request.get_json()
+    year = data.get('year')
+
+    if year is not None:
+        total_flights = airline_df.filter(airline_df['Year'] == year).count()
+        return jsonify({'total_flights': total_flights})
+    else:
+        return jsonify({'error': 'Year not provided'})
+
 @bp.route('/api/total-flights-range', methods=['POST'])
 def total_flights_range():
     total_flights = 0

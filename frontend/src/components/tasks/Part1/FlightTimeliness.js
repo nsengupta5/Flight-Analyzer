@@ -4,6 +4,7 @@ import Select from '../../form/Select';
 import Submit from '../../form/Submit';
 import Card from '../../ui/Card';
 import Plot from 'react-plotly.js';
+import Spinner from '../../ui/Spinner';
 
 function getYears() {
   const startYear = 1987;
@@ -37,6 +38,7 @@ function FlightTimeliness() {
   const [earlyFlights, setEarlyFlights] = useState(-1);
   const [unknownFlights, setUnknownFlights] = useState(-1);
   const [totalFlights, setTotalFlights] = useState(-1);
+  const [loading, setLoading] = useState(false);
 
   const handleYearChange = (e) => {
     setOnTimeFlights(-1);
@@ -49,6 +51,7 @@ function FlightTimeliness() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
 
     // Use axios to send the data to the backend
     axios.post('/api/flight-timeliness-stats', {
@@ -61,6 +64,7 @@ function FlightTimeliness() {
         setEarlyFlights(response.data.early_flights);
         setUnknownFlights(response.data.unknown_flights);
         setTotalFlights(response.data.total_flights);
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
@@ -80,27 +84,33 @@ function FlightTimeliness() {
           </div>
         </div>
       </form>
-      {totalFlights !== -1 &&
-          onTimeFlights !== -1 &&
-          delayedFlights !== -1 &&
-          earlyFlights !== -1 &&
-          <Plot
-            // Pie chart showing the percentage of on-time, delayed, and early flights
-            data={[
-              {
-                values: [onTimeFlights, delayedFlights, earlyFlights, unknownFlights],
-                  labels: ['On Time', 'Delayed', 'Early', 'Unknown'],
-                  type: 'pie',
-                  marker: {
-                    colors: getPlotColorsMapping()
-                  }
-              }
-            ]}
-            layout={{ autosize:true, title: 'Flight Timeliness Stats' }}
-            useResizeHandler={true}
-            style={{ width: "100%", height: "100%" }}
-          />
-      }
+      {loading ? (
+        <Spinner />
+      ) : (
+        <>
+          {totalFlights !== -1 &&
+              onTimeFlights !== -1 &&
+              delayedFlights !== -1 &&
+              earlyFlights !== -1 && (
+                <Plot
+                  // Pie chart showing the percentage of on-time, delayed, and early flights
+                  data={[
+                    {
+                      values: [onTimeFlights, delayedFlights, earlyFlights, unknownFlights],
+                        labels: ['On Time', 'Delayed', 'Early', 'Unknown'],
+                        type: 'pie',
+                        marker: {
+                          colors: getPlotColorsMapping()
+                        }
+                    }
+                  ]}
+                  layout={{ autosize:true, title: 'Flight Timeliness Stats' }}
+                  useResizeHandler={true}
+                  style={{ width: "100%", height: "100%" }}
+                /> )
+          }
+        </>
+      )}
     </Card>
   )
 }

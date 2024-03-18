@@ -3,6 +3,7 @@ import axios from 'axios';
 import Select from '../../form/Select';
 import Submit from '../../form/Submit';
 import Card from '../../ui/Card';
+import Spinner from '../../ui/Spinner';
 
 function getYears() {
   const startYear = 1987;
@@ -24,6 +25,7 @@ function TotalFlightsRange() {
   const [startYear, setStartYear] = useState('');
   const [endYear, setEndYear] = useState('');
   const [totalFlights, setTotalFlights] = useState(-1);
+  const [loading, setLoading] = useState(false);
 
   const handleStartYearChange = (e) => {
     setTotalFlights(-1)
@@ -37,9 +39,11 @@ function TotalFlightsRange() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
 
     if (!isValidRange(Number(startYear), Number(endYear))) {
       alert('Invalid range');
+      setLoading(false);
       return;
     }
 
@@ -51,6 +55,7 @@ function TotalFlightsRange() {
     })
     .then((response) => {
       setTotalFlights(response.data.total_flights);
+      setLoading(false);
     })
     .catch((error) => {
       console.log(error);
@@ -68,11 +73,15 @@ function TotalFlightsRange() {
             <Select placeholder="Select a end year" options={years} label="year" onChange={handleEndYearChange} />
           </div>
           <div class="mt-7">
-            <Submit placeholder="Get Number of Years"/>
+            <Submit placeholder="Get Number of Flights"/>
           </div>
         </div>
       </form>
-      {totalFlights !== -1 && <p class="text-black text-1xl font-sans font-semibold mt-5">Total Flights: {totalFlights}</p>}
+      {loading ? (
+        <Spinner />
+      ) : (
+      totalFlights !== -1 && (<p class="text-black text-1xl font-sans font-semibold mt-5">Total Flights: {totalFlights}</p>)
+      )}
     </Card>
   )
 }

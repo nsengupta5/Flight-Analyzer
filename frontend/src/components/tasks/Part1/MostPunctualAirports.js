@@ -3,11 +3,13 @@ import axios from 'axios';
 import Select from '../../form/Select';
 import Submit from '../../form/Submit';
 import Card from '../../ui/Card';
+import Spinner from '../../ui/Spinner';
 
 function MostPunctualAirports() {
   const years = [1987, 1997, 2007, 2017];
   const [year, setYear] = useState('');
   const [puncAirports, setPuncAirports] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const handleYearChange = (e) => {
     setPuncAirports([]);
@@ -16,6 +18,7 @@ function MostPunctualAirports() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
 
     // Use axios to send the data to the backend
     axios.post('/api/most-punctual-airports', {
@@ -24,6 +27,7 @@ function MostPunctualAirports() {
     })
       .then((response) => {
         setPuncAirports(response.data.most_punctual_airports);
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
@@ -43,16 +47,19 @@ function MostPunctualAirports() {
           </div>
         </div>
       </form>
-      {puncAirports.length > 0 &&
-        <>
-          <p class="text-black text-1xl font-sans font-semibold mt-5">Most Punctual Airports in {year}:</p>
-          {puncAirports.map((airport, index) => (
+      {loading ? (
+        <Spinner />
+      ) :
+      <>
+        {puncAirports.length.length > 0 && year && ( 
+          <p class="text-black text-1xl font-sans font-semibold mt-5">Most Punctual Airports in {year}:</p> )}
+        {puncAirports.map((airport, index) => (
           <p key={index} class="text-black text-sm font-sans font-md mt-3">{(index + 1)}) {airport}</p>
         ))}
-        </>
+      </>
       }
     </Card>
-  )
+)
 }
 
 export default MostPunctualAirports;

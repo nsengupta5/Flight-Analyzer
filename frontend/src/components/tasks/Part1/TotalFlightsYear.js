@@ -16,14 +16,13 @@ function getYears() {
   return years;
 }
 
-function TopCancellationReason() {
+function TotalFlightsYear() {
   const years = getYears();
   const [year, setYear] = useState('');
-  const [reason, setReason] = useState('');
+  const [totalFlights, setTotalFlights] = useState(-1);
   const [loading, setLoading] = useState(false);
 
   const handleYearChange = (e) => {
-    setReason('');
     setYear(e.target.value);
   }
 
@@ -32,12 +31,12 @@ function TopCancellationReason() {
     setLoading(true);
 
     // Use axios to send the data to the backend
-    axios.post('/api/top-cancellation-reason', {
+    axios.post('/api/total-flights-year', {
       // Cast the years to integers
       year: Number(year)
     })
       .then((response) => {
-        setReason(response.data.top_reason);
+        setTotalFlights(response.data.total_flights);
         setLoading(false);
       })
       .catch((error) => {
@@ -47,22 +46,22 @@ function TopCancellationReason() {
 
   return (
     <Card>
-      <h1 class="text-black text-3xl font-sans font-semibold mb-8">Top Cancellation Reason</h1>
+      <h1 class="text-black text-3xl font-sans font-semibold mb-8">Total Flights (Year)</h1>
       <form onSubmit={handleSubmit} class="w-full">
         <div class="flex flex-col justify-center items-center w-full">
           <div>
             <Select placeholder="Select a year" options={years} label="year" onChange={handleYearChange} />
           </div>
           <div class="mt-7">
-            <Submit placeholder="Get Top Cancellation Reason"/>
+            <Submit placeholder="Get Number of Flights"/>
           </div>
         </div>
       </form>
       {loading ? (
         <Spinner />
-      ) : reason !== '' ? (<p class="text-black text-1xl font-sans font-semibold mt-5">Top Cancellation Reason: {reason}</p>) : null}
+      ) : totalFlights !== -1 ? (<p class="text-black text-1xl font-sans font-semibold mt-5">Total Flights: {totalFlights}</p>) : null}
     </Card>
   )
 }
 
-export default TopCancellationReason;
+export default TotalFlightsYear;
