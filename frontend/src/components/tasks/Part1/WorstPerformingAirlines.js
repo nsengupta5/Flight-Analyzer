@@ -26,11 +26,11 @@ function WorstPerformingAirlines() {
         console.log(error);
       }
       )}
-  , []);
+  , [airlines.length]);
 
   return (
     <Card>
-      <h1 class="text-black text-3xl font-sans font-semibold mb-3">Worst Performing Airlines</h1>
+      <h1 class="text-black text-3xl font-sans font-semibold mb-3 text-center">Worst Performing Airlines</h1>
       {loading ? ( 
         <Spinner />
       ) :

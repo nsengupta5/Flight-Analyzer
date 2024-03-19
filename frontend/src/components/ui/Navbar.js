@@ -1,31 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 function Navbar() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleMenuToggle = () => {
+    setIsMenuOpen(!isMenuOpen);
+  }
+
   return (
-    <nav class="bg-white border-blue-700 dark:bg-blue-700 w-screen mb-12">
-      <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
-          <span class="self-center text-2xl ml-2 font-semibold whitespace-nowrap dark:text-white">AeroSights</span>
+      <nav className="w-screen mb-12 bg-white border-violet-500 dark:bg-violet-500">
+      <div className="flex flex-wrap items-center justify-between p-4 mx-auto max-w-screen-xl">
+        <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
+          <span className="self-center ml-2 text-2xl font-semibold whitespace-nowrap dark:text-white">AeroSights</span>
         </a>
-        <button data-collapse-toggle="navbar-default" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-default" aria-expanded="false">
-          <span class="sr-only">Open main menu</span>
-          <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+        <button 
+          onClick={handleMenuToggle} // Toggle menu open state
+          className="inline-flex items-center justify-center w-10 h-10 p-2 text-sm text-white rounded-lg md:hidden hover:bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 dark:text-white dark:hover:bg-violet-700 dark:focus:ring-violet-500"
+          aria-controls="navbar-default"
+          aria-expanded={isMenuOpen}
+        >
+          <span className="sr-only">Open main menu</span>
+          <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12h18M3 6h18M3 18h18"/>
           </svg>
         </button>
-        <div class="hidden w-full md:block md:w-auto" id="navbar-default">
-          <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-blue-700 dark:border-gray-700">
+        {/* Toggle class based on menu state */}
+        <div className={`${isMenuOpen ? 'block' : 'hidden'} w-full md:block md:w-auto`} id="navbar-default">
+          <ul className="flex flex-col p-4 mt-4 font-medium border rounded-lg border-violet-100 md:p-0 bg-violet-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-violet-800 md:dark:bg-violet-500 dark:border-violet-700">
+            {/* Menu items */}
             <li>
-              <a href="/" class="block py-2 px-3 text-blue-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-200 md:p-0 dark:text-white md:dark:hover:text-blue-200 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" aria-current="page">Home</a>
+              <a href="/" className="block px-3 py-2 rounded text-violet-500 hover:bg-violet-100 md:hover:bg-transparent md:border-0 md:hover:text-violet-200 md:p-0 dark:text-white md:dark:hover:text-violet-200 dark:hover:bg-violet-700 dark:hover:text-white md:dark:hover:bg-transparent" aria-current="page">Home</a>
             </li>
             <li>
-              <a href="/data-analysis" class="block py-2 px-3 text-blue-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-200 md:p-0 dark:text-white md:dark:hover:text-blue-200 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Data Analysis</a>
+              <a href="/data-analysis" className="block px-3 py-2 rounded text-violet-500 hover:bg-violet-100 md:hover:bg-transparent md:border-0 md:hover:text-violet-200 md:p-0 dark:text-white md:dark:hover:text-violet-200 dark:hover:bg-violet-700 dark:hover:text-white md:dark:hover:bg-transparent">Data Analysis</a>
             </li>
             <li>
-              <a href="/performance" class="block py-2 px-3 text-blue-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-200 md:p-0 dark:text-white md:dark:hover:text-blue-200 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Performance Analysis</a>
+              <a href="/performance" class="block py-2 px-3 text-violet-500 rounded hover:bg-violet-100 md:hover:bg-transparent md:border-0 md:hover:text-violet-200 md:p-0 dark:text-white md:dark:hover:text-violet-200 dark:hover:bg-violet-700 dark:hover:text-white md:dark:hover:bg-transparent">Performance Analysis</a>
             </li>
             <li>
-              <a href="/predictive" class="block py-2 px-3 text-blue-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-200 md:p-0 dark:text-white md:dark:hover:text-blue-200 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Predictive Insights</a>
+              <a href="/predictive" class="block py-2 px-3 text-violet-500 rounded hover:bg-violet-100 md:hover:bg-transparent md:border-0 md:hover:text-violet-200 md:p-0 dark:text-white md:dark:hover:text-violet-200 dark:hover:bg-violet-700 dark:hover:text-white md:dark:hover:bg-transparent">Predictive Insights</a>
             </li>
           </ul>
         </div>

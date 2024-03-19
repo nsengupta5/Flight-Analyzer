@@ -55,7 +55,7 @@ function TotalFlightsList() {
 
   return (
     <Card>
-      <h1 class="text-black text-3xl font-sans font-semibold mb-8">Total Flights (List)</h1>
+      <h1 class="text-black text-3xl font-sans font-semibold mb-8 text-center">Total Flights (List)</h1>
       <form onSubmit={handleSubmit} class="w-full">
         <div class="flex flex-col justify-center items-center w-full">
             <Input placeholder="Enter comma separated years" onChange={handleYearChange} />

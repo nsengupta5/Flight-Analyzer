@@ -4,7 +4,7 @@ function Button(props) {
   const { title } = props;
 
   return (
-    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-4 rounded-md">
+    <button class="bg-violet-400 hover:bg-violet-500 text-white font-bold py-4 px-4 rounded-md">
       {title}
     </button>
   )

@@ -64,15 +64,26 @@ function TotalFlightsRange() {
 
   return (
     <Card>
-      <h1 class="text-black text-3xl font-sans font-semibold mb-8">Total Flights (Range)</h1>
-      <form onSubmit={handleSubmit} class="w-full">
-        <div class="flex flex-col justify-center items-center w-full">
-          <div class="flex flex-row justify-between items-center w-full">
-            <Select placeholder="Select a start year" options={years} label="year" onChange={handleStartYearChange} />
-            <span class="text-gray-500 text-sm">To</span>
-            <Select placeholder="Select a end year" options={years} label="year" onChange={handleEndYearChange} />
+      <h1 class="mb-8 font-sans text-3xl font-semibold text-black text-center">Total Flights (Range)</h1>
+      <form onSubmit={handleSubmit} className="w-full">
+        <div className="flex flex-col items-center justify-center w-full">
+          <div className="flex flex-col items-center justify-between w-full sm:flex-row sm:max-w-2xl">
+            <Select 
+              placeholder="Select a start year" 
+              options={years} 
+              label="year" 
+              onChange={handleStartYearChange} 
+              className="mb-3 sm:mb-0"
+            />
+            <span className="my-3 text-sm text-gray-500 sm:my-0">To</span>
+            <Select 
+              placeholder="Select an end year" 
+              options={years} 
+              label="year" 
+              onChange={handleEndYearChange}
+            />
           </div>
-          <div class="mt-7">
+          <div className="mt-7">
             <Submit placeholder="Get Number of Flights"/>
           </div>
         </div>
@@ -80,7 +91,7 @@ function TotalFlightsRange() {
       {loading ? (
         <Spinner />
       ) : (
-      totalFlights !== -1 && (<p class="text-black text-1xl font-sans font-semibold mt-5">Total Flights: {totalFlights}</p>)
+        totalFlights !== -1 && (<p className="mt-5 font-sans font-semibold text-black text-1xl">Total Flights: {totalFlights}</p>)
       )}
     </Card>
   )
