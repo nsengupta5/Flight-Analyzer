@@ -63,7 +63,7 @@ function TotalFlightsRange() {
     )};
 
   return (
-    <Card>
+    <Card className="w-full max-w-md">
       <h1 class="mb-8 font-sans text-3xl font-semibold text-black text-center">Total Flights (Range)</h1>
       <form onSubmit={handleSubmit} className="w-full">
         <div className="flex flex-col items-center justify-center w-full">

@@ -9,7 +9,7 @@ function Navbar() {
 
   return (
       <nav className="w-screen mb-12 bg-white border-violet-500 dark:bg-violet-500">
-      <div className="flex flex-wrap items-center justify-between p-4 mx-auto max-w-screen-xl">
+      <div className="flex flex-wrap items-center justify-between p-4 mx-auto">
         <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           <span className="self-center ml-2 text-2xl font-semibold whitespace-nowrap dark:text-white">AeroSights</span>
         </a>

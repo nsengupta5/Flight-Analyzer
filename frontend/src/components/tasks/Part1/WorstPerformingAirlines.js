@@ -29,7 +29,7 @@ function WorstPerformingAirlines() {
   , [airlines.length]);
 
   return (
-    <Card>
+    <Card className="w-full max-w-md">
       <h1 class="text-black text-3xl font-sans font-semibold mb-3 text-center">Worst Performing Airlines</h1>
       {loading ? ( 
         <Spinner />

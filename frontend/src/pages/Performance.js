@@ -6,8 +6,7 @@ function Performance() {
   return (
     <div class="flex flex-col justify-center items-center">
       <Navbar />
-      <h1 class="text-black
-        text-5xl font-sans font-semibold mb-16">Performance Analysis</h1>
+      <h1 class="text-black text-4xl font-sans font-semibold mb-16">Performance Analysis</h1>
       <AirportPerformance />
     </div>
   )

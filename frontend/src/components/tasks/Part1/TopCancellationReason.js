@@ -46,7 +46,7 @@ function TopCancellationReason() {
       )};
 
   return (
-    <Card>
+    <Card className="w-full max-w-md">
       <h1 class="text-black text-3xl font-sans font-semibold mb-8 text-center">Top Cancellation Reason</h1>
       <form onSubmit={handleSubmit} class="w-full">
         <div class="flex flex-col justify-center items-center w-full">
