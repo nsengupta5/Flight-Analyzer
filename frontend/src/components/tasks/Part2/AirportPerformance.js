@@ -109,7 +109,7 @@ function AirportPerformance() {
                   stroke={colorPalette[index % colorPalette.length]}
                   strokeWidth={2}
                   fill={colorPalette[index % colorPalette.length]}
-                  fillOpacity={0.6} 
+                  fillOpacity={0} 
                 />
               ))}
               <Legend />

@@ -1,6 +1,7 @@
 from flask import jsonify, request
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
+from pyspark.sql.window import Window
 from . import part2_blueprint as bp
 
 # Get Spark Session
@@ -32,6 +33,25 @@ def get_airport_score():
     airports = data.get('airports')
     results = []
 
+    global_min_max_values = {
+        'mean_security_delay': {
+            'min': float(airline_df.agg(F.min('SecurityDelay')).collect()[0][0]),
+            'max': float(airline_df.agg(F.max('SecurityDelay')).collect()[0][0]),
+        },
+        'mean_taxi_out': {
+            'min': float(airline_df.agg(F.min('TaxiOut')).collect()[0][0]),
+            'max': float(airline_df.agg(F.max('TaxiOut')).collect()[0][0]),
+        },
+        'mean_taxi_in': {
+            'min': float(airline_df.agg(F.min('TaxiIn')).collect()[0][0]),
+            'max': float(airline_df.agg(F.max('TaxiIn')).collect()[0][0]),
+        },
+        'total_flights': {
+            'min': float(airline_df.groupBy('OriginAirportID').count().agg(F.min('count')).collect()[0][0]),
+            'max': float(airline_df.groupBy('OriginAirportID').count().agg(F.max('count')).collect()[0][0]),
+        }
+    }
+
     # TODO Figure out the other data
     if airports is not None:
         filtered_df = airline_df.filter(airline_df['OriginAirportID'].isin(airports))
@@ -41,19 +61,10 @@ def get_airport_score():
             (F.sum(F.when(F.col('DepDel15') == 1, 1).otherwise(0)) / F.count('*')).alias('dep_del_rate'),
             (F.sum(F.when(F.col('Cancelled') == 1, 1).otherwise(0)) / F.count('*')).alias('cancellation_rate'),
             (F.sum(F.when(F.col('Diverted') == 1, 1).otherwise(0)) / F.count('*')).alias('diversion_rate'),
-            # F.median('SecurityDelay').alias('median_security_delay'),
-            # F.median('TaxiOut').alias('median_taxi_out'),
-            # F.median('TaxiIn').alias('median_taxi_in'),
+            F.avg('SecurityDelay').alias('mean_security_delay'),
+            F.avg('TaxiOut').alias('mean_taxi_out'),
+            F.avg('TaxiIn').alias('mean_taxi_in'),
         )
-
-        # # List of columns to scale
-        # columns_to_scale = [
-        #     'median_security_delay', 
-        #     'median_taxi_out', 'median_taxi_in'
-        # ]
-
-        # # Apply the Min-Max scaler
-        # metrics_df_scaled = min_max_scaler(metrics_df, columns_to_scale)
 
         collected_data = metrics_df.collect()
 
@@ -62,32 +73,33 @@ def get_airport_score():
             "dep_del_rate": "Departure Delay Rate",
             "cancellation_rate": "Cancellation Rate",
             "diversion_rate": "Diversion Rate",
-            # "median_security_delay": "Median Security Delay",
-            # "median_taxi_out": "Median Taxi Out",
-            # "median_taxi_in": "Median Taxi In",
+            "mean_security_delay": "Mean Security Delay",
+            "mean_taxi_out": "Mean Taxi Out",
+            "mean_taxi_in": "Mean Taxi In",
         }
 
-        # Initialize a dictionary for each metric
         for metric, readable_name in metric_mapping.items():
             metric_map = {"metric": readable_name}
             for row in collected_data:
-                metric_map[row['Origin']] = row[metric]
+                if readable_name.startswith('Mean'):  # Check if it's a mean metric
+                    min_value = global_min_max_values[metric]['min']
+                    max_value = global_min_max_values[metric]['max']
+                    normalized_value = normalize_value(row[metric], min_value, max_value)
+                    metric_map[row['Origin']] = normalized_value
+                else:
+                    metric_map[row['Origin']] = row[metric]  # Use the original value for percentage metrics
             results.append(metric_map)
 
         return jsonify({"airport_data": results})
     else:
         return jsonify({'error': 'No airports provided'})
 
-def min_max_scaler(df, cols_to_scale):
-    for col in cols_to_scale:
-        # Find the minimum and maximum values of the column
-        min_col, max_col = df.select(F.min(col), F.max(col)).first()
+def normalize_value(value, min_value, max_value):
+    """
+    Normalize a value using Min-Max normalization.
+    """
+    # Avoid division by zero in case min and max are the same
+    if min_value == max_value:
+        return 0
 
-        # Avoid division by zero
-        if max_col != min_col:
-            # Apply the Min-Max scaling formula
-            df = df.withColumn(col, (F.col(col) - min_col) / (max_col - min_col))
-        else:
-            # In case max and min are the same, set all values to 1
-            df = df.withColumn(col, F.lit(1.0))
-    return df
+    return (value - min_value) / (max_value - min_value)
