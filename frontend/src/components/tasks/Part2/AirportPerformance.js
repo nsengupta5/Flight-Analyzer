@@ -24,7 +24,6 @@ function getAirportDataCodes(airportData) {
   return airportDataCodes;
 }
 
-
 function AirportPerformance() {
   const [airports, setAirports] = useState(() => {
     const localData = localStorage.getItem('airports');

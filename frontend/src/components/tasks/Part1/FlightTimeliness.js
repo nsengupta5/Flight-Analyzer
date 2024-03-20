@@ -72,7 +72,7 @@ function FlightTimeliness() {
       )};
 
   return (
-    <Card className="w-full max-w-md">
+    <Card className="w-5/6 max-w-md">
       <h1 class="text-black text-3xl font-sans font-semibold mb-8 text-center">Flight Timeliness Stats</h1>
       <form onSubmit={handleSubmit} class="w-full">
         <div class="flex flex-col justify-center items-center w-full">
