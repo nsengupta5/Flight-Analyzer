@@ -1,8 +1,8 @@
 function Submit(props) {
-  const { placeholder } = props;
+  const { placeholder, className } = props;
 
   return (
-    <button type="submit" class="bg-violet-400 hover:bg-violet-500 text-white font-bold py-2 px-4 rounded">{placeholder}</button>
+    <button type="submit" class={`bg-violet-400 hover:bg-violet-500 text-white font-bold py-2 px-4 rounded ${className}`}>{placeholder}</button>
   );
 }
 

@@ -1,25 +1,41 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import Card from '../../ui/Card';
-import Slider from '../../form/Slider';
 import USChloroplethMap from './USChloroplethMap';
 import Select from '../../form/Select';
+import Submit from '../../form/Submit';
+import Spinner from '../../ui/Spinner';
 
-const minYear = 1987;
-const maxYear = 2020;
+function getYears() {
+  const startYear = 1987;
+  const endYear = 2020;
+  const years = [];
+
+  for (let i = startYear; i <= endYear; i++) {
+    years.push(i);
+  }
+  return years;
+}
 
 function StatePerformance() {
   const metrics = [
     'Arrival Delay Rate',
-    'Departure Delay ',
+    'Departure Delay Rate',
     'Cancellation Rate',
-    'Diversions Rate',
-    'Mean Security Delay',
+    'Diversion Rate',
     'Mean Taxi In Time',
     'Mean Taxi Out Time',
+    'Composite Score'
   ];
   const [year, setYear] = useState(1987);
   const [metric, setMetric] = useState('Arrival Delay Rate');
+  const [statePerformance, setStatePerformance] = useState({});
+  const [regionPerformance, setRegionPerformance] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [showMap, setShowMap] = useState(false);
+  const [minStateVal, setMinStateVal] = useState(0);
+  const [maxStateVal, setMaxStateVal] = useState(100);
+  const [error, setError] = useState(null);
 
   function handleYearChange(event) {
     event.preventDefault();
@@ -31,25 +47,52 @@ function StatePerformance() {
     setMetric(event.target.value);
   }
 
-  useEffect(() => {
-    axios.post('/api/state-performance', {
-      year: year,
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    axios.post('/api/get-state-performance', {
+      year: Number(year),
       metric: metric,
     })
       .then((response) => {
-        console.log(response.data);
+        console.log(response.data.performance_data);
+        setStatePerformance(response.data.performance_data["state_performance"]);
+        setMinStateVal(response.data.performance_data["min_state_val"]);
+        setMaxStateVal(response.data.performance_data["max_state_val"]);
+        setRegionPerformance(response.data.performance_data["region_performance"]);
+        setShowMap(true);
       })
       .catch((error) => {
+        setError(error.response.data.error);
         console.log(error);
-      });
-  });
+      })
+      .finally(() => {
+        setLoading(false);
+      })
+  }
 
   return (
     <Card className="w-full max-w-6xl mt-10">
-      <p class="text-black text-2xl font-sans font-semibold mb-8 text-center">Choose a metric:</p>
-      <Select placeholder="Select a metric" options={metrics} label="year" onChange={handleMetricChange} className="mb-8" />
-      <USChloroplethMap /> 
-      <Slider value={year} minVal={minYear} maxVal={maxYear} label={`Current Year: ${year}`} onChange={handleYearChange} className="w-5/6 mt-8" />
+      <h1 class="mb-4 font-sans text-3xl font-semibold text-black text-center">State Performance Comparison</h1>
+      <form class="flex flex-col w-full justify-center items-center sm:flex flex-row" onSubmit={handleSubmit}>
+        <div className="flex flex-col items-center justify-center w-3/6 mb-2">
+          <h3 class="text-black text-2xl font-sans font-small mb-5 mt-5 text-center">Choose a metric:</h3>
+          <Select placeholder="Select a metric" options={metrics} label="metric" onChange={handleMetricChange} className="w-full ml-3" />
+        </div>
+        <div className="flex flex-col items-center justify-center w-3/6 mb-8">
+          <h3 class="text-black text-2xl font-sans font-small mb-5 mt-5 text-center">Choose a year:</h3>
+          <Select placeholder="Select a year" options={getYears()} label="year" onChange={handleYearChange} className="w-full ml-3" />
+        </div>
+        <Submit placeholder="Compare State Performance" className="h-1/3"/>
+      </form>
+      {loading ? (
+          <Spinner />
+      ) : error ? (
+          <div className="mt-3 font-semibold text-center text-red-500">{error}</div>
+      ) : showMap &&
+      <USChloroplethMap statePerformance={statePerformance} regionPerformance={regionPerformance} minStateVal={minStateVal} maxStateVal={maxStateVal} />
+      }
     </Card>
   );
 

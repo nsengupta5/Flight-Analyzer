@@ -79,6 +79,8 @@ function AirportPerformance() {
 
   return (
     <Card className="w-full max-w-3xl">
+      <h1 class="mb-8 font-sans text-3xl font-semibold text-black text-center">Airport Performance Comparison</h1>
+      <h3 class="text-black text-2xl font-sans font-small mb-5 text-center">Choose airports to compare:</h3>
       <div class="w-full">
         <form onSubmit={handleSubmit} class="flex flex-col justify-center items-center w-full">
           <Select
