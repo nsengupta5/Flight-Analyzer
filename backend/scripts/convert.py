@@ -5,7 +5,7 @@ from os.path import isfile, join
 # Data directories
 source_data_dir = "/cs/datasets/CS5052/P1/"
 supplementary_dir = f"{source_data_dir}/SupplementaryCSVs"
-local_data_dir = "./data"
+local_data_dir = "../data"
 
 # Data files
 data_file = f"{source_data_dir}/airline.csv"
