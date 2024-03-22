@@ -5,7 +5,7 @@ from . import part1_blueprint as bp
 from .helper import replaceStateAbbreviation
 
 # Get Spark Session
-spark = SparkSession.builder.appName('AeroSights').getOrCreate()
+spark = SparkSession.builder.appName('InFlight').getOrCreate()
 
 # Main airline dataframe
 airline_df = spark.read.parquet('data/airline.parquet', header=True)

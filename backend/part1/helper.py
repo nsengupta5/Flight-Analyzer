@@ -1,6 +1,6 @@
 from pyspark.sql import SparkSession
 
-spark = SparkSession.builder.appName('AeroSights').getOrCreate()
+spark = SparkSession.builder.appName('InFlight').getOrCreate()
 
 """
 Replace the state abbreviation with the full state name

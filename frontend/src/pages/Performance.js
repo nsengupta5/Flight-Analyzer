@@ -1,3 +1,7 @@
+/**
+ * @file Performance.js
+ * This file corresponds to Part 2 of the assignment, implementing the performance analysis tasks
+ */
 import React from 'react';
 import Navbar from '../components/ui/Navbar';
 import AirportPerformance from '../components/tasks/Part2/AirportPerformance';

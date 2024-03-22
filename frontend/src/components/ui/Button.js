@@ -1,3 +1,7 @@
+/**
+ * @file Button.js
+ * @description Button component for the application
+ */
 import React from 'react';
 
 function Button(props) {

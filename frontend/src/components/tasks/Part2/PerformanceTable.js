@@ -1,3 +1,9 @@
+/**
+ * @file PerformanceTable.js
+ * @description A table component that displays the performance of states in different regions.
+ * The data prop is an object with regions as keys and arrays of states as values.
+ * The table displays the states in each region in descending order of performance.
+ */
 import React from 'react';
 
 function PerformanceTable(props) {

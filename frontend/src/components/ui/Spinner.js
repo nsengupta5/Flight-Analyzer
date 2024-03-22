@@ -1,3 +1,8 @@
+/**
+ * @file Spinner.js
+ * @description Spinner component for the application for loading state
+ */
+
 import React from 'react';
 
 function Spinner() {

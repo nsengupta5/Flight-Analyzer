@@ -1,3 +1,9 @@
+/**
+ * @file FlightTimeliness.js
+ * @description This file implements the query that retrieves the flight timeliness statistics for a given year.
+ * The user selects a year from a dropdown menu to retrieve the statistics of the flights for that year.
+ */
+
 import React, { useState } from 'react';
 import axios from 'axios';
 import Select from '../../form/Select';
@@ -6,6 +12,11 @@ import Card from '../../ui/Card';
 import Plot from 'react-plotly.js';
 import Spinner from '../../ui/Spinner';
 
+/**
+ * @function getYears
+ * @description This function generates an array of years from 1987 to 2020.
+ * @returns {Array} An array of years from 1987 to 2020.
+ */
 function getYears() {
   const startYear = 1987;
   const endYear = 2020;
@@ -17,6 +28,11 @@ function getYears() {
   return years;
 }
 
+/**
+ * @function getPlotColorsMapping
+ * @description This function maps the labels to the corresponding colors.
+ * @returns {Array} An array of colors for the labels.
+ */
 function getPlotColorsMapping() {
   const colorMapping = {
     'On Time': '#63D1F4', // Color for "On Time"
@@ -40,6 +56,7 @@ function FlightTimeliness() {
   const [totalFlights, setTotalFlights] = useState(-1);
   const [loading, setLoading] = useState(false);
 
+  // Reset the state when the year changes
   const handleYearChange = (e) => {
     setOnTimeFlights(-1);
     setDelayedFlights(-1);
@@ -84,6 +101,7 @@ function FlightTimeliness() {
           </div>
         </div>
       </form>
+      {/* Display the pie chart only if the data is loaded */}
       {loading ? (
         <Spinner />
       ) : (
@@ -93,7 +111,6 @@ function FlightTimeliness() {
               delayedFlights !== -1 &&
               earlyFlights !== -1 && (
                 <Plot
-                  // Pie chart showing the percentage of on-time, delayed, and early flights
                   data={[
                     {
                       values: [onTimeFlights, delayedFlights, earlyFlights, unknownFlights],

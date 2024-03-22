@@ -1,3 +1,12 @@
+/**
+ * @file StatePerformance.js
+ * @description This file contains the StatePerformance component which is used to visualize and compare
+ * the performance of different states and regions in the US based on the performance metrics selected
+ * by the user. The user can select a metric and a year to compare the performance of different states
+ * and regions in the US for that year. The component displays a chloropleth map of the US with color-coded
+ * states based on their performance for the selected metric and year. The component also displays a table
+ * of the best and worst performing states in each region for the selected metric and year.
+ */
 import React, { useState } from 'react';
 import axios from 'axios';
 import Card from '../../ui/Card';
@@ -7,6 +16,11 @@ import Submit from '../../form/Submit';
 import Spinner from '../../ui/Spinner';
 import PerformanceTable from './PerformanceTable';
 
+/**
+ * @function getYears
+ * @description This function generates an array of years from 1987 to 2020.
+ * @returns {Array} An array of years from 1987 to 2020.
+ */
 function getYears() {
   const startYear = 1987;
   const endYear = 2020;
@@ -19,6 +33,7 @@ function getYears() {
 }
 
 function StatePerformance() {
+  // List of performance metrics
   const metrics = [
     'Arrival Delay Rate',
     'Departure Delay Rate',
@@ -60,10 +75,14 @@ function StatePerformance() {
     })
       .then((response) => {
         console.log(response.data.performance_data);
+        // Set the performance data of each state for the selected metric and year
         setStatePerformance(response.data.performance_data["state_performance"]);
+        // Set the minimum and maximum performance values of the states
         setMinStateVal(response.data.performance_data["min_state_val"]);
         setMaxStateVal(response.data.performance_data["max_state_val"]);
+        // Set the performance data of each region for the selected metric and year
         setRegionPerformance(response.data.performance_data["region_performance"]);
+        // Select the top 3 best and worst performing states for the selected metric and year
         setBestStates(response.data.performance_data["best_states"]);
         setWorstStates(response.data.performance_data["worst_states"]);
         setShowMap(true);

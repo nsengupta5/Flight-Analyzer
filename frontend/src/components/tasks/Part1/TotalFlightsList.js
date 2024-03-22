@@ -1,3 +1,8 @@
+/**
+ * @file TotalFlightsList.js
+ * @description This file implements the query that retrieves the total number of flights for a list of years.
+ * The user enters a comma-separated list of years to retrieve the total number of flights for those years.
+ */
 import React, { useState } from 'react';
 import axios from 'axios';
 import Input from '../../form/Input';
@@ -5,11 +10,18 @@ import Submit from '../../form/Submit';
 import Card from '../../ui/Card';
 import Spinner from '../../ui/Spinner';
 
+/**
+ * @function getYearList
+ * @description This function generates an array of years from the user input.
+ * @param {String} yearQuery - A comma-separated list of years.
+ * @returns {Array} An array of years from the user input.
+ */
 function getYearList(yearQuery) {
   const minYear = 1987;
   const maxYear = 2020;
   const years = yearQuery.split(',').map(year => Number(year.trim()));
   for (let year of years) {
+    // Check if the year is within the valid range
     if (year < minYear || year > maxYear) {
       return [];
     }
@@ -32,6 +44,7 @@ function TotalFlightsList() {
 
     const yearList = getYearList(yearQuery);
     if (yearList.length === 0) {
+      // Alert the user if the year range is invalid
       alert('Invalid year range');
       setLoading(false);
       return;
@@ -64,6 +77,7 @@ function TotalFlightsList() {
           </div>
         </div>
       </form>
+      {/* Display the total number of flights only if the data is loaded */}
       {loading ? (
         <Spinner />
       ) : (

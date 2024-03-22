@@ -1,3 +1,8 @@
+/**
+ * @file Card.js
+ * @description Card component for the application
+ */
+
 import React from 'react';
 
 const Card = ({ children, className = "" }) => {

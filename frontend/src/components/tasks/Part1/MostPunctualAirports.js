@@ -1,3 +1,9 @@
+/**
+ * @file MostPunctualAirports.js
+ * @description This file implements the query that retrieves the most punctual airports for a given year.
+ * The user selects a year from a dropdown menu to retrieve the most punctual airports for that year.
+ */
+
 import React, { useState } from 'react';
 import axios from 'axios';
 import Select from '../../form/Select';
@@ -11,6 +17,7 @@ function MostPunctualAirports() {
   const [puncAirports, setPuncAirports] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  // Reset the state when the year changes
   const handleYearChange = (e) => {
     setPuncAirports([]);
     setYear(e.target.value);
@@ -47,10 +54,12 @@ function MostPunctualAirports() {
           </div>
         </div>
       </form>
+      {/* Display the pie chart only if the data is loaded */}
       {loading ? (
         <Spinner />
       ) :
       <>
+        {/** Display the most punctual airports only if the there are any */}
         {puncAirports.length.length > 0 && year && ( 
           <p class="text-black text-1xl font-sans font-semibold mt-5">Most Punctual Airports in {year}:</p> )}
         {puncAirports.map((airport, index) => (

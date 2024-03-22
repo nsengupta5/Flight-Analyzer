@@ -1,3 +1,8 @@
+/**
+ * @file DataAnalysis.js
+ * This file corresponds to Part 1 of the assignment, implementing the core data analysis tasks
+ */
+
 import React from 'react';
 import TotalFlightsYear from '../components/tasks/Part1/TotalFlightsYear';
 import TotalFlightsRange from '../components/tasks/Part1/TotalFlightsRange';

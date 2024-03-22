@@ -1,3 +1,9 @@
+/**
+ * @file WorstPerformingAirlines.js
+ * @description This file implements the query that retrieves the worst performing airlines.
+ * The user can view the worst performing airlines.
+ */
+
 import React, { useState, useEffect } from 'react';
 import Card from '../../ui/Card';
 import axios from 'axios';
@@ -5,12 +11,14 @@ import Spinner from '../../ui/Spinner';
 
 function WorstPerformingAirlines() {
   const [airlines, setAirlines] = useState(() => {
+    // Save the data in local storage to avoid making a request to the backend
     const localData = localStorage.getItem('airlines');
     return localData ? JSON.parse(localData) : [];
   });
   const [loading, setLoading] = useState(airlines.length === 0);
 
   useEffect(() => {
+    // If the data is already in local storage, do not make a request to the backend
     if (airlines.length > 0) {
       setLoading(false);
       return
@@ -31,6 +39,7 @@ function WorstPerformingAirlines() {
   return (
     <Card className="w-5/6 max-w-md">
       <h1 class="text-black text-3xl font-sans font-semibold mb-3 text-center">Worst Performing Airlines</h1>
+      {/** Display the list of worst performing airlines only if the data is loaded */}
       {loading ? ( 
         <Spinner />
       ) :

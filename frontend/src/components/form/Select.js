@@ -1,3 +1,8 @@
+/**
+ * @file Select.js
+ * @description Select component for the application
+ */
+
 function Select(props) {
   const { placeholder, options = [], label, onChange, className } = props;
 

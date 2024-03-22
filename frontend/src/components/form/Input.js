@@ -1,3 +1,7 @@
+/**
+ * @file Input.js
+ * @description Input component for the application
+ */
 function Input(props) {
   const { placeholder, label, onChange } = props;
 

@@ -1,3 +1,7 @@
+/**
+ * @file Submit.js
+ * @description Submit component for the application
+ */
 function Submit(props) {
   const { placeholder, className } = props;
 

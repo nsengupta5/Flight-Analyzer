@@ -1,3 +1,9 @@
+/**
+ * @file TotalFlightsYear.js
+ * @description This file implements the query that retrieves the total number of flights for a given year.
+ * The user selects a year from a dropdown menu to retrieve the total number of flights for that year.
+ */
+
 import React, { useState } from 'react';
 import axios from 'axios';
 import Select from '../../form/Select';
@@ -5,6 +11,11 @@ import Submit from '../../form/Submit';
 import Card from '../../ui/Card';
 import Spinner from '../../ui/Spinner';
 
+/**
+ * @function getYears
+ * @description This function generates an array of years from 1987 to 2020.
+ * @returns {Array} An array of years from 1987 to 2020.
+ */
 function getYears() {
   const startYear = 1987;
   const endYear = 2020;
@@ -57,6 +68,7 @@ function TotalFlightsYear() {
           </div>
         </div>
       </form>
+      {/* Display the total number of flights only if the data is loaded */}
       {loading ? (
         <Spinner />
       ) : totalFlights !== -1 ? (<p class="text-black text-1xl font-sans font-semibold mt-5">Total Flights: {totalFlights}</p>) : null}

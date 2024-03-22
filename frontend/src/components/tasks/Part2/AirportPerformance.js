@@ -1,4 +1,12 @@
-import React, { useState, useEffect, PureComponent } from 'react';
+/**
+ * @file AirportPerformance.js
+ * @description This file allows the user to compare the performance of different airports based on various metrics.
+ * The metrics are chosen to best represent the performance of the airport. 
+ * The user can select multiple airports to compare and the data is displayed in a radar chart. 
+ * The radar chart is used to compare the performance of multiple airports based on multiple metrics.
+ */
+
+import React, { useState, useEffect } from 'react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Legend } from 'recharts';
 import axios from 'axios';
 import Card from '../../ui/Card';
@@ -6,6 +14,12 @@ import Select from 'react-select';
 import Spinner from '../../ui/Spinner';
 import Submit from '../../form/Submit';
 
+/**
+ * @function getAirportCodes
+ * @description This function takes in an array of airports and returns an array of airport codes.
+ * @param {Array} airports - An array of airports.
+ * @returns {Array} - An array of airport codes.
+ */
 function getAirportCodes(airports) {
   let airportCodes = [];
   for (let i = 0; i < airports.length; i++) {
@@ -14,10 +28,17 @@ function getAirportCodes(airports) {
   return airportCodes;
 }
 
+/**
+ * @function getAirportDataCodes
+ * @description This function takes in an array of airport data and returns an array of airport data codes.
+ * @param {Array} airportData - An array of airport data.
+ * @returns {Array} - An array of airport data codes.
+ */
 function getAirportDataCodes(airportData) {
   let airportDataCodes = [];
   let sample_mapping = airportData[0];
   for (let key in sample_mapping) {
+    // Exclude the metric key
     if (key !== "metric")
       airportDataCodes.push(key);
   }
@@ -26,6 +47,7 @@ function getAirportDataCodes(airportData) {
 
 function AirportPerformance() {
   const [airports, setAirports] = useState(() => {
+    // Get airports from local storage if available
     const localData = localStorage.getItem('airports');
     return localData ? JSON.parse(localData) : [];
   });
@@ -35,6 +57,7 @@ function AirportPerformance() {
   const [airportDataCodes, setAirportDataCodes] = useState([]);
   const colorPalette = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#8dd1e1"]
 
+  // Get airport performance data
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
@@ -54,6 +77,7 @@ function AirportPerformance() {
     )
   };
 
+  // Fetch airports if not available in local storage
   useEffect(() => {
     if (airports.length > 0) {
       setLoading(false);
@@ -73,6 +97,7 @@ function AirportPerformance() {
       });
   }, [airports.length]);
 
+  // Update airport data codes when airport data changes
   useEffect(() => {
     setAirportDataCodes(getAirportDataCodes(airportData));
   }, [airportData]);
@@ -95,6 +120,7 @@ function AirportPerformance() {
           </div>
         </form>
       </div>
+      {/* Render the radar chart if data is available */}
       {loading ? (
         <Spinner />
       ) : airportData.length != 0 && airportDataCodes.length != 0 &&
