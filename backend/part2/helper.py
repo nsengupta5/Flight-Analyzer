@@ -25,14 +25,46 @@ def get_performance_result_single(metric, collected_data, global_min_max_values,
 
             minStateVal = min(metric_map.values())
             maxStateVal = max(metric_map.values())
+            best_states = get_best_performing_states(metric_map)
+            worst_states = get_worst_performing_states(metric_map)
             region_scores = get_region_score(metric_map)
             metric_map['metric'] = v
             result = {'state_performance': metric_map, 
                       'region_performance': region_scores,
                       'min_state_val': minStateVal,
-                      'max_state_val': maxStateVal
+                      'max_state_val': maxStateVal,
+                      'best_states': best_states,
+                      'worst_states': worst_states,
                       }
             return result
+
+def get_best_performing_states(state_performance):
+    region_mapping = get_region_mapping()
+    scores = {}
+
+    # Get the top 3 performing states for each region
+    for region, states in region_mapping.items():
+        region_scores = [(state, score) for state, score in state_performance.items() if state in states]
+        region_scores = sorted(region_scores, key=lambda x: x[1], reverse=True)
+        best_states = []
+        for i in range(3):
+            best_states.append({'state': region_scores[i][0], 'score': region_scores[i][1]})
+        scores[region] = best_states
+    return scores
+
+def get_worst_performing_states(state_performance):
+    region_mapping = get_region_mapping()
+    scores = {}
+
+    # Get the bottom 3 performing states for each region
+    for region, states in region_mapping.items():
+        region_scores = [(state, score) for state, score in state_performance.items() if state in states]
+        region_scores = sorted(region_scores, key=lambda x: x[1])
+        worst_states = []
+        for i in range(3):
+            worst_states.append({'state': region_scores[i][0], 'score': region_scores[i][1]})
+        scores[region] = worst_states
+    return scores
 
 def get_performance_result_composite(collected_data, global_min_max_values, metric_mapping, weights):
     composite_scores = {}
@@ -61,12 +93,16 @@ def get_performance_result_composite(collected_data, global_min_max_values, metr
     
     minStateVal = min(state_performance.values())
     maxStateVal = max(state_performance.values())
+    best_states = get_best_performing_states(state_performance)
+    worst_states = get_worst_performing_states(state_performance)
     state_performance['metric'] = "Composite Score"
     region_scores = get_region_score(state_performance)
     result = {'state_performance': state_performance,
               'region_performance': region_scores,
               'min_state_val': minStateVal,
-              'max_state_val': maxStateVal
+              'max_state_val': maxStateVal,
+              'best_states': best_states,
+              'worst_states': worst_states,
               }
     return result
 

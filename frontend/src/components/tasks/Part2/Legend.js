@@ -25,7 +25,7 @@ const Legend = (props) => {
         const color = colorScale(grade).hex();
         labels.push(
           '<i style="background:' + color + '; width: 18px; height: 18px; float: left; margin-right: 8px; opacity: 0.7;"></i> ' +
-          Math.round(grade) + (grades[grades.indexOf(grade) + 1] ? '&ndash;' + Math.round(grades[grades.indexOf(grade) + 1]) + '<br>' : '+')
+          grade.toFixed(2) + (grades[grades.indexOf(grade) + 1] ? '&ndash;' + grades[grades.indexOf(grade) + 1].toFixed(2) + '<br>' : '+')
         );
       });
 

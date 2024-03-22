@@ -5,6 +5,7 @@ import USChloroplethMap from './USChloroplethMap';
 import Select from '../../form/Select';
 import Submit from '../../form/Submit';
 import Spinner from '../../ui/Spinner';
+import PerformanceTable from './PerformanceTable';
 
 function getYears() {
   const startYear = 1987;
@@ -35,6 +36,8 @@ function StatePerformance() {
   const [showMap, setShowMap] = useState(false);
   const [minStateVal, setMinStateVal] = useState(0);
   const [maxStateVal, setMaxStateVal] = useState(100);
+  const [bestStates, setBestStates] = useState({});
+  const [worstStates, setWorstStates] = useState({});
   const [error, setError] = useState(null);
 
   function handleYearChange(event) {
@@ -61,6 +64,8 @@ function StatePerformance() {
         setMinStateVal(response.data.performance_data["min_state_val"]);
         setMaxStateVal(response.data.performance_data["max_state_val"]);
         setRegionPerformance(response.data.performance_data["region_performance"]);
+        setBestStates(response.data.performance_data["best_states"]);
+        setWorstStates(response.data.performance_data["worst_states"]);
         setShowMap(true);
       })
       .catch((error) => {
@@ -89,9 +94,20 @@ function StatePerformance() {
       {loading ? (
           <Spinner />
       ) : error ? (
-          <div className="mt-3 font-semibold text-center text-red-500">{error}</div>
-      ) : showMap &&
-      <USChloroplethMap statePerformance={statePerformance} regionPerformance={regionPerformance} minStateVal={minStateVal} maxStateVal={maxStateVal} />
+        <div className="mt-3 font-semibold text-center text-red-500">{error}</div>
+      ) : showMap && <>
+        <USChloroplethMap statePerformance={statePerformance} regionPerformance={regionPerformance} minStateVal={minStateVal} maxStateVal={maxStateVal} />
+        <div class="flex flex-col justify-between">
+          <div className="mt-8 mb-3 text-3xl font-semibold text-center text-black">
+            <h1 class="text-3xl">Best Performing States</h1>
+            <PerformanceTable data={bestStates} />
+          </div>
+          <div className="mt-8 mb-3 ml-5 text-3xl font-semibold text-center text-black">
+            <h1 class="text-3xl">Worst Performing States</h1>
+            <PerformanceTable data={worstStates}/>
+          </div>
+        </div>
+      </>
       }
     </Card>
   );
