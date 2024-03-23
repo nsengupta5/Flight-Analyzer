@@ -14,8 +14,9 @@
 \usepackage[
 backend=biber,
 sorting=none]{biblatex}
-\graphicspath{ {./img/} }
 \addbibresource{bibliography.bib}
+
+\graphicspath{ {./img/} }
 
 \title{Inflight: Practical 1}
 \author{190018035}
@@ -27,34 +28,29 @@ sorting=none]{biblatex}
 
 \tableofcontents
 
-\section{Introduction}
+\begin{introduction}
+\input{sections/introduction.tex}
+\end{introduction}
 
-\begin{table}[]
-    \centering
-\begin{tabular}{|l|l|l|}
-\hline
-Part 1                                                                                                                           & Part 2                                                                                                                                                                        & Part 3 \\ \hline
-\begin{tabular}[c]{@{}l@{}}Read in and store the dataset\\ using PySpark\end{tabular}                                            & \begin{tabular}[c]{@{}l@{}}Determine a "performance" metric\\ for airports and display a radar chart\\ to compare airport performance given\\ a list of airports\end{tabular} &        \\ \hline
-\begin{tabular}[c]{@{}l@{}}Display the total number of \\ flights given a year\end{tabular}                                      & \begin{tabular}[c]{@{}l@{}}Chart region and state performance on\\ on a US map\end{tabular}                                                                                   &        \\ \hline
-\begin{tabular}[c]{@{}l@{}}Display the total number of \\ flights given a range of years\end{tabular}                            & \begin{tabular}[c]{@{}l@{}}Display a table of the best and worst\\ performing states in each US region\end{tabular}                                                           &        \\ \hline
-\begin{tabular}[c]{@{}l@{}}Display the total number of\\ flights given comma-separated\\ list of years\end{tabular}              &                                                                                                                                                                               &        \\ \hline
-\begin{tabular}[c]{@{}l@{}}Display the percentage of flights\\ that departed on time, early and\\ late\end{tabular}              &                                                                                                                                                                               &        \\ \hline
-\begin{tabular}[c]{@{}l@{}}Display the top reason for cancelled\\ flights given a year\end{tabular}                              &                                                                                                                                                                               &        \\ \hline
-\begin{tabular}[c]{@{}l@{}}Determine a "performance" metric\\ and display the top three worst\\ performing airlines\end{tabular} &                                                                                                                                                                               &        \\ \hline
-\end{tabular}
-\label{tab:tasks}
-\caption{Features implemented in each part of the project.}
-\end{table}
+\begin{part1}
+\input{sections/part1.tex}
+\end{part1}
 
-\section{Part 1}
+\begin{part2}
+\input{sections/part2.tex}
+\end{part2}
 
-\section{Part 2}
+\begin{part3}
+\input{sections/part3.tex}
+\end{part3}
 
-\section{Part 3}
+\begin{evaluation}
+\input{sections/evaluation.tex}
+\end{evaluation}
 
-\section{Evaluation}
-
-\section{Conclusion}
+\begin{conclusion}
+\input{sections/conclusion.tex}
+\end{conclusion}
 
 % TODO INCLUDE WORD COUNT
 \noindent Word Count: 225

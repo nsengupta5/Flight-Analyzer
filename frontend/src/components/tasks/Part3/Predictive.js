@@ -17,11 +17,6 @@ function Predictive() {
 
   return (
       <Card className="w-full max-w-6xl">
-        <h1 className="mb-5 text-4xl font-semibold text-gray-800">Predictive Model</h1>
-        <h3 className="mb-5 text-2xl font-semibold text-gray-800">Step 1. Data Exploration</h3>
-        <h3 className="mb-5 text-2xl font-semibold text-gray-800">Step 2. Data Preprocessing</h3>
-        <h3 className="mb-5 text-2xl font-semibold text-gray-800">Step 3. Feature Selection</h3>
-        <h3 className="mb-5 text-2xl font-semibold text-gray-800">Step 4. Model Selection</h3>
       </Card>
   );
 }

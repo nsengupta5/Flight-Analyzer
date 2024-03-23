@@ -248,8 +248,10 @@ Returns:
 def worst_performing_airlines():
     airline_mapping = spark.read.parquet('data/L_AIRLINE_ID.parquet', header=True)
 
+    twentieth_century_df = airline_df.where(airline_df['Year'] < 2000)
+
     # Get the percentage of delayed and cancelled flights for each reporting airline
-    reporting_airlines = airline_df.groupBy('DOT_ID_Reporting_Airline').agg(
+    reporting_airlines = twentieth_century_df.groupBy('DOT_ID_Reporting_Airline').agg(
         (F.sum(F.when(F.col('DepDel15') == 1, 1).otherwise(0)) / F.count('*')).alias('PercentageDepDelayedFlights'),
         (F.sum(F.when(F.col('ArrDel15') == 1, 1).otherwise(0)) / F.count('*')).alias('PercentageArrDelayedFlights'),
         (F.sum(F.when(F.col('Cancelled') == 1, 1).otherwise(0)) / F.count('*')).alias('PercentageCancelledFlights')
