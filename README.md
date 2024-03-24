@@ -11,9 +11,9 @@
 3. Navigate to the frontend directory: `cd frontend`
 4. Install the frontend dependencies: `npm install`
 5. Navigate to the scripts directory in the backend folder: `cd backend/scripts`
-6. Run the script to convert the CSV data to parquet files: `python convert.py`
+6. Activate the Conda environment: `conda activate inflight`
+7. Run the script to convert the CSV data to parquet files: `python convert.py`
 
 ## Running the Application
-1. Activate the Conda environment: `conda activate inflight`
-2. Navigate to the backend directory: `cd backend` and run the backend server: `python app.py`
-3. Navigate to the frontend directory: `cd frontend` and run the frontend server: `npm start`
+1. Navigate to the backend directory: `cd backend` and run the backend server: `python app.py`
+2. Navigate to the frontend directory: `cd frontend` and run the frontend server: `npm start`
