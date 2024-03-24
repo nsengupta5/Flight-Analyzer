@@ -29,7 +29,7 @@ function AirportMap(props) {
     const density = stateDensity[state];
     return {
       fillColor: colorScale(density).hex(),
-      fillOpacity: 1,
+      fillOpacity: 0.8,
       color: "white",
       weight: 1 
     };

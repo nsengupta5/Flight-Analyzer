@@ -48,7 +48,7 @@ function VisualizeRoutes() {
       });
   }
   return (
-    <Card className="w-full max-w-7xl">
+    <Card className="w-full max-w-[90rem]">
       <h1 class="mb-8 font-sans text-3xl font-semibold text-black text-center">Visualize Airport Routes</h1>
       <div class="w-full">
         <form onSubmit={handleSubmit} class="flex flex-col justify-center items-center w-full">

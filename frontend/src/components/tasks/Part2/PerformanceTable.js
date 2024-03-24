@@ -44,10 +44,10 @@ function PerformanceTable(props) {
               <thead className="font-medium border-b border-neutral-200 dark:border-black/10">
                 <tr>
                   <th scope="col" className="px-6 py-4">#</th>
-                  <th scope="col" className="px-6 py-4">West</th>
                   <th scope="col" className="px-6 py-4">Midwest</th>
-                  <th scope="col" className="px-6 py-4">South</th>
                   <th scope="col" className="px-6 py-4">Northeast</th>
+                  <th scope="col" className="px-6 py-4">South</th>
+                  <th scope="col" className="px-6 py-4">West</th>
                 </tr>
               </thead>
               <tbody>

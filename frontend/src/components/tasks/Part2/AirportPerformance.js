@@ -78,6 +78,16 @@ function AirportPerformance() {
     )
   };
 
+  // Custom handler for setting selected airports with limit
+  const handleAirportSelectionChange = (selectedOptions) => {
+    if (selectedOptions.length <= 5) { // Limit the selections to 5
+      setAirportsSelected(selectedOptions);
+    } else {
+      // Optionally, alert the user that they can only select up to 5 airports
+      alert('You can only select up to 5 airports for comparison.');
+    }
+  };
+
   // Fetch airports if not available in local storage
   useEffect(() => {
     if (airports.length > 0) {
@@ -115,7 +125,7 @@ function AirportPerformance() {
           <form onSubmit={handleSubmit} class="flex flex-col justify-center items-center w-full">
             <Select
               options={airports.map(airport => ({ value: airport["OriginAirportID"], label: airport["Description"] }))}
-              onChange={setAirportsSelected}
+              onChange={handleAirportSelectionChange}
               value={airportsSelected}
               isMulti
               className="w-5/6"

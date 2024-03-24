@@ -99,6 +99,9 @@ function FlightDensityTimeLapse() {
         setCurrentYear(year => {
           const years = Object.keys(timelapseData);
           const index = years.indexOf(year.toString());
+          if (index === 0) {
+            return years[years.length - 1];
+          }
           const nextIndex = (index - 1) % years.length;
           return years[nextIndex];
         });

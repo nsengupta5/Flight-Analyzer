@@ -30,7 +30,7 @@ function USChloroplethMap(props) {
     const score = statePerformance[state];
     return {
       fillColor: colorScale(score).hex(),
-      fillOpacity: 1,
+      fillOpacity: 0.8,
       color: "white",
       weight: 1 
     };
