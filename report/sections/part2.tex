@@ -1,8 +1,15 @@
 \section{Part 2: Intermediate Features}
 
 \subsection{Feature Description}
+This section details the intermediate features implemented in the project. These features include determining a "performance" metric for airports and displaying a radar chart to compare airport performance given a list of airports, charting region and state performance on a US map, and displaying a table of the best and worst performing states in each US region.
 
 \paragraph{Task 1: Compare the performance of airports across the dataset} TEMP\\
+This task allows the user to choose a list of airports and compare their performance based on a performance metric. The performance metric is calculated based on the following factors:
+\begin{itemize}
+    \item The percentage of flights that were delayed when departing.
+    \item The percentage of flights that were delayed when arriving.
+    \item The percentage of flights that were cancelled.
+    \item The percentage of flights that were diverted.
 
 \noindent \textit{Location:} Code lines 65-102 in file \codeword{backend/part2/views.py}
 
@@ -15,5 +22,3 @@
     \item Composite score logic: Code lines 72-116 in file \codeword{backend/part2/helper.py}
     \item Region score logic: Code lines 169-176 in file \codeword{backend/part2/helper.py}
   \end{itemize}
-
-\subsection{Difficulties Encountered}

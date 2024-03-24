@@ -130,7 +130,7 @@ function USChloroplethMap(props) {
       <GeoJSON data={WestOutline} style={westRegionStyle} onEachFeature={onEachFeatureRegion} />
       <GeoJSON data={SouthOutline} style={southRegionStyle} onEachFeature={onEachFeatureRegion} /> 
       <GeoJSON data={NorthEastOutline} style={northEastRegionStyle} onEachFeature={onEachFeatureRegion} />
-      <Legend colorScale={colorScale} minVal={minStateVal} maxVal={maxStateVal} />
+      <Legend colorScale={colorScale} minVal={minStateVal} maxVal={maxStateVal} title="Score (%)" />
     </MapContainer>
   );
 }

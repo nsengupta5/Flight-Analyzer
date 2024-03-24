@@ -7,7 +7,7 @@ import { useMap } from 'react-leaflet';
 import L from 'leaflet';
 
 const Legend = (props) => {
-  const { colorScale, minVal, maxVal } = props;
+  const { colorScale, minVal, maxVal, rawMin, rawMax, title } = props;
   const map = useMap();
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const Legend = (props) => {
       div.style.padding = '10px'; 
       div.style.border = '1px solid #ccc'; 
       div.style.boxShadow = '0 0 15px rgba(0, 0, 0, 0.2)'; 
-      let labels = ['<strong>Score (%)</strong><br>'];
+      let labels = [`<strong>${title}</strong><br>`];
 
       // Add the color scale to the legend
       grades.forEach((grade) => {
@@ -47,7 +47,7 @@ const Legend = (props) => {
       // Remove the legend if the component is unmounted
       legend.remove();
     };
-  }, [colorScale, map, minVal, maxVal]);
+  }, [colorScale, map, minVal, maxVal, title]);
 
   return null;
 };

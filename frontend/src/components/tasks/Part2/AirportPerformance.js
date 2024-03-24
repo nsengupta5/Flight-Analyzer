@@ -52,7 +52,8 @@ function AirportPerformance() {
     return localData ? JSON.parse(localData) : [];
   });
   const [airportsSelected, setAirportsSelected] = useState([]);
-  const [loading, setLoading] = useState(airports.length === 0);
+  const [airportLoading, setAirportLoading] = useState(airports.length === 0);
+  const [loading, setLoading] = useState(false);
   const [airportData, setAirportData] = useState([]);
   const [airportDataCodes, setAirportDataCodes] = useState([]);
   const colorPalette = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#8dd1e1"]
@@ -80,7 +81,7 @@ function AirportPerformance() {
   // Fetch airports if not available in local storage
   useEffect(() => {
     if (airports.length > 0) {
-      setLoading(false);
+      setAirportLoading(false);
       return;
     }
     axios.get('/api/get-airports')
@@ -93,7 +94,7 @@ function AirportPerformance() {
         console.log(error);
       })
       .finally(() => {
-        setLoading(false);
+        setAirportLoading(false);
       });
   }, [airports.length]);
 
@@ -105,21 +106,27 @@ function AirportPerformance() {
   return (
     <Card className="w-full max-w-3xl">
       <h1 class="mb-8 font-sans text-3xl font-semibold text-black text-center">Airport Performance Comparison</h1>
-      <h3 class="text-black text-2xl font-sans font-small mb-5 text-center">Choose airports to compare:</h3>
-      <div class="w-full">
-        <form onSubmit={handleSubmit} class="flex flex-col justify-center items-center w-full">
-          <Select
-            options={airports.map(airport => ({ value: airport["OriginAirportID"], label: airport["Description"] }))}
-            onChange={setAirportsSelected}
-            value={airportsSelected}
-            isMulti
-            className="w-5/6"
-          />
-          <div class="mt-7">
-            <Submit placeholder="Compare Airport Performance"/>
-          </div>
-        </form>
-      </div>
+      {airportLoading ? (
+        <Spinner />
+      ) : airports.length !== 0 &&
+      <>
+        <h3 class="text-black text-2xl font-sans font-small mb-5 text-center">Choose airports to compare:</h3>
+        <div class="w-full">
+          <form onSubmit={handleSubmit} class="flex flex-col justify-center items-center w-full">
+            <Select
+              options={airports.map(airport => ({ value: airport["OriginAirportID"], label: airport["Description"] }))}
+              onChange={setAirportsSelected}
+              value={airportsSelected}
+              isMulti
+              className="w-5/6"
+            />
+            <div class="mt-7">
+              <Submit placeholder="Compare Airport Performance"/>
+            </div>
+          </form>
+        </div>
+        </>
+      }
       {/* Render the radar chart if data is available */}
       {loading ? (
         <Spinner />
