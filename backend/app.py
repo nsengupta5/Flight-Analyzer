@@ -3,6 +3,7 @@ from part1 import part1_blueprint
 from part2 import part2_blueprint
 from part3 import part3_blueprint
 from flask_cors import CORS
+from waitress import serve
 
 """
 Create a Flask app and register the blueprints for the three parts of the 
@@ -18,4 +19,4 @@ def create_app():
 
 if __name__ == '__main__':
     app = create_app()
-    app.run()
+    serve(app, host='0.0.0.0', port=5000)
