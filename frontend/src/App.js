@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import {HashRouter as Router, Route, Routes} from 'react-router-dom';
 import Home from './pages/Home'
 import DataAnalysis from './pages/DataAnalysis'
 import Performance from './pages/Performance'

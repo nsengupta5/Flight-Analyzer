@@ -37,13 +37,13 @@ function Navbar() {
               <a href="/" className="block px-3 py-2 rounded text-violet-500 hover:bg-violet-100 md:hover:bg-transparent md:border-0 md:hover:text-violet-200 md:p-0 dark:text-white md:dark:hover:text-violet-200 dark:hover:bg-violet-700 dark:hover:text-white md:dark:hover:bg-transparent" aria-current="page">Home</a>
             </li>
             <li>
-              <a href="/data-analysis" className="block px-3 py-2 rounded text-violet-500 hover:bg-violet-100 md:hover:bg-transparent md:border-0 md:hover:text-violet-200 md:p-0 dark:text-white md:dark:hover:text-violet-200 dark:hover:bg-violet-700 dark:hover:text-white md:dark:hover:bg-transparent">Data Analysis</a>
+              <a href="/#/data-analysis" className="block px-3 py-2 rounded text-violet-500 hover:bg-violet-100 md:hover:bg-transparent md:border-0 md:hover:text-violet-200 md:p-0 dark:text-white md:dark:hover:text-violet-200 dark:hover:bg-violet-700 dark:hover:text-white md:dark:hover:bg-transparent">Data Analysis</a>
             </li>
             <li>
-              <a href="/performance" class="block py-2 px-3 text-violet-500 rounded hover:bg-violet-100 md:hover:bg-transparent md:border-0 md:hover:text-violet-200 md:p-0 dark:text-white md:dark:hover:text-violet-200 dark:hover:bg-violet-700 dark:hover:text-white md:dark:hover:bg-transparent">Performance Analysis</a>
+              <a href="/#/performance" class="block py-2 px-3 text-violet-500 rounded hover:bg-violet-100 md:hover:bg-transparent md:border-0 md:hover:text-violet-200 md:p-0 dark:text-white md:dark:hover:text-violet-200 dark:hover:bg-violet-700 dark:hover:text-white md:dark:hover:bg-transparent">Performance Analysis</a>
             </li>
             <li>
-              <a href="/advanced" class="block py-2 px-3 text-violet-500 rounded hover:bg-violet-100 md:hover:bg-transparent md:border-0 md:hover:text-violet-200 md:p-0 dark:text-white md:dark:hover:text-violet-200 dark:hover:bg-violet-700 dark:hover:text-white md:dark:hover:bg-transparent">Advanced Insights</a>
+              <a href="/#/advanced" class="block py-2 px-3 text-violet-500 rounded hover:bg-violet-100 md:hover:bg-transparent md:border-0 md:hover:text-violet-200 md:p-0 dark:text-white md:dark:hover:text-violet-200 dark:hover:bg-violet-700 dark:hover:text-white md:dark:hover:bg-transparent">Advanced Insights</a>
             </li>
           </ul>
         </div>
