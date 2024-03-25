@@ -7,7 +7,7 @@ import { useMap } from 'react-leaflet';
 import L from 'leaflet';
 
 const Legend = (props) => {
-  const { colorScale, minVal, maxVal, rawMin, rawMax, title } = props;
+  const { colorScale, minVal, maxVal, title } = props;
   const map = useMap();
 
   useEffect(() => {

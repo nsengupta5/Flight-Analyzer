@@ -140,7 +140,7 @@ function AirportPerformance() {
       {/* Render the radar chart if data is available */}
       {loading ? (
         <Spinner />
-      ) : airportData.length != 0 && airportDataCodes.length != 0 &&
+      ) : airportData.length !== 0 && airportDataCodes.length !== 0 &&
           <ResponsiveContainer width="100%" height={400}>
             <RadarChart cx="50%" cy="50%" outerRadius="80%" data={airportData}>
               <PolarGrid />
